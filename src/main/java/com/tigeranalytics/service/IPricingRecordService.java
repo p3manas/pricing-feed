@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface IPricingRecordService {
 
-     void savePricingRecord(PricingRecord pricingRecord) throws Exception;
+     void savePricingRecord(PricingRecord pricingRecord);
 
      PricingRecord getPricingRecordById(Long id) ;
 

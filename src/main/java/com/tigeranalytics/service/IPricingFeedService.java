@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IPricingFeedService {
 
-     void savePricingFeeds(MultipartFile file) throws Exception;
+     void savePricingFeeds(MultipartFile file);
 
      List<PricingFeed> getAllPricingFeeds();
 }

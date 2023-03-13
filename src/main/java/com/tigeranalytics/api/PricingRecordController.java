@@ -1,9 +1,10 @@
 package com.tigeranalytics.api;
 
-import com.tigeranalytics.bean.PricingFeedBean;
 import com.tigeranalytics.bean.PricingRecordBean;
 import com.tigeranalytics.dto.PricingRecord;
+import com.tigeranalytics.exception.ApplicationException;
 import com.tigeranalytics.service.IPricingRecordService;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +21,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/pricing")
+@Log4j2
 public class PricingRecordController {
     @Autowired
     private IPricingRecordService pricingRecordService;
@@ -28,13 +30,23 @@ public class PricingRecordController {
     public String getPricingFeeds(Model model, @RequestParam(required = false) String keyword,
                                   @RequestParam(defaultValue = "1") int page,
                                   @RequestParam(defaultValue = "10") int size) {
-        Pageable paging = PageRequest.of(page - 1, size);
-        Page<PricingRecordBean> pricingFeedBeans = pricingRecordService.findAll(keyword, paging);
-        model.addAttribute("pricingRecords", pricingFeedBeans.getContent());
-        model.addAttribute("currentPage", pricingFeedBeans.getNumber() + 1);
-        model.addAttribute("totalItems", pricingFeedBeans.getTotalElements());
-        model.addAttribute("totalPages", pricingFeedBeans.getTotalPages());
-        model.addAttribute("pageSize", size);
+        log.info("Operation started");
+        long inTime = System.currentTimeMillis();
+        try {
+            Pageable paging = PageRequest.of(page - 1, size);
+            Page<PricingRecordBean> pricingFeedBeans = pricingRecordService.findAll(keyword, paging);
+            model.addAttribute("pricingRecords", pricingFeedBeans.getContent());
+            model.addAttribute("currentPage", pricingFeedBeans.getNumber() + 1);
+            model.addAttribute("totalItems", pricingFeedBeans.getTotalElements());
+            model.addAttribute("totalPages", pricingFeedBeans.getTotalPages());
+            model.addAttribute("pageSize", size);
+            log.info("Operation completed. Total time taken {} in ms", System.currentTimeMillis() - inTime);
+        } catch (ApplicationException e) {
+            log.error("Operation failed {}", e.getMessage());
+            model.addAttribute("message", "Operation failed due to internal error");
+            return "failed";
+        }
+
         return "pricingFeeds";
     }
 
@@ -44,42 +56,83 @@ public class PricingRecordController {
                                        @RequestParam(value = "productName", required = false) String productName,
                                        @RequestParam(name = "date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
                                        Model model) {
-        List<PricingRecord> pricingRecords = pricingRecordService.searchPricingRecords(storeId, sku, productName, date);
-        model.addAttribute("pricingRecords", pricingRecords);
-        return "search";
+        log.info("Operation started");
+        long inTime = System.currentTimeMillis();
+        try {
+            List<PricingRecord> pricingRecords = pricingRecordService.searchPricingRecords(storeId, sku, productName, date);
+            model.addAttribute("pricingRecords", pricingRecords);
+            log.info("Operation completed. Total time taken {} in ms", System.currentTimeMillis() - inTime);
+            return "search";
+        } catch (ApplicationException e) {
+            log.error("Operation failed {}", e.getMessage());
+            model.addAttribute("message", "Operation failed due to internal error");
+            return "failed";
+        }
     }
 
     @GetMapping("/edit/{id}")
     public String editPricingRecord(@PathVariable Long id, Model model) {
-        PricingRecord pricingRecord = pricingRecordService.getPricingRecordById(id);
-        model.addAttribute("pricingRecord", pricingRecord);
-        return "pricing-record-edit";
+        log.info("Operation started");
+        long inTime = System.currentTimeMillis();
+        try {
+            PricingRecord pricingRecord = pricingRecordService.getPricingRecordById(id);
+            model.addAttribute("pricingRecord", pricingRecord);
+            log.info("Operation completed. Total time taken {} in ms", System.currentTimeMillis() - inTime);
+            return "pricing-record-edit";
+        } catch (ApplicationException e) {
+            log.error("Operation failed {}", e.getMessage());
+            model.addAttribute("message", "Operation failed due to internal error");
+            return "failed";
+        }
     }
 
     @GetMapping("/create")
     public String showUploadForm(Model model) {
-        model.addAttribute("pricingRecord", new PricingRecord());
-        return "pricing-record-add";
+        log.info("Operation started");
+        long inTime = System.currentTimeMillis();
+        try {
+            model.addAttribute("pricingRecord", new PricingRecord());
+            log.info("Operation completed. Total time taken {} in ms", System.currentTimeMillis() - inTime);
+            return "pricing-record-add";
+        } catch (ApplicationException e) {
+            log.error("Operation failed {}", e.getMessage());
+            model.addAttribute("message", "Operation failed due to internal error");
+            return "failed";
+        }
     }
 
     @GetMapping("/fetchAll")
     public String fetchAll(Model model) {
-        model.addAttribute("pricingRecord", new PricingRecord());
-        return "pricing-record-add";
+        log.info("Operation started");
+        long inTime = System.currentTimeMillis();
+        try {
+            model.addAttribute("pricingRecord", new PricingRecord());
+            log.info("Operation completed. Total time taken {} in ms", System.currentTimeMillis() - inTime);
+            return "pricing-record-add";
+        } catch (ApplicationException e) {
+            log.error("Operation failed {}", e.getMessage());
+            model.addAttribute("message", "Operation failed due to internal error");
+            return "failed";
+        }
     }
 
-
     @PostMapping("/save")
-    public String savePricingRecord(@ModelAttribute @Valid PricingRecord pricingRecord, BindingResult bindingResult) {
+    public String savePricingRecord(@ModelAttribute @Valid PricingRecord pricingRecord,
+                                    BindingResult bindingResult, Model model) {
+        log.info("Operation started");
+        long inTime = System.currentTimeMillis();
         if (bindingResult.hasErrors()) {
             return "pricing-record-add";
         }
         try {
             pricingRecordService.savePricingRecord(pricingRecord);
-        } catch (Exception e) {
-
+        } catch (ApplicationException e) {
+            log.error("Operation failed {}", e.getMessage());
+            model.addAttribute("message", "Operation failed due to internal error");
+            return "failed";
         }
-
+        log.info("Operation completed. Total time taken {} in ms", System.currentTimeMillis() - inTime);
         return "pricing-record-add";
     }
+
 }
