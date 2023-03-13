@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Pricing Feeds</title>
+</head>
+<body>
+<h1>Upload Pricing Feeds</h1>
+<form action="#" th:action="@{/upload}" th:object="${pricingFeed}" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" />
+    <button type="submit">Upload</button>
+</form>
+</body>
+</html>

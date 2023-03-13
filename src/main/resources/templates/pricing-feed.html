@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>List of Pricing Feeds</title>
+  <style>
+		table, th, td {
+			border: 1px solid black;
+			border-collapse: collapse;
+			padding: 5px;
+		}
+	</style>
+</head>
+<body>
+<h1>List of Pricing Feeds</h1>
+<table>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Price</th>
+    <th>Last Updated</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="feed : ${feeds}">
+    <td th:text="${feed.id}"></td>
+    <td th:text="${feed.name}"></td>
+    <td th:text="${feed.price}"></td>
+    <td th:text="${feed.lastUpdated}"></td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

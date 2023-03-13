@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Pricing Feeds</title>
+</head>
+<body>
+<h1>Pricing Feeds</h1>
+<table>
+  <tr>
+    <th>Store ID</th>
+    <th>SKU</th>
+    <th>Product Name</th>
+    <th>Price</th>
+    <th>Date</th>
+  </tr>
+  <tr th:each="pricingRecord : ${pricingRecords}">
+    <td th:text="${pricingRecord.storeId}"></td>
+    <td th:text="${pricingRecord.sku}"></td>
+    <td th:text="${pricingRecord.productName}"></td>
+    <td th:text="${pricingRecord.price}"></td>
+    <td th:text="${pricingRecord.date}"></td>
+  </tr>
+</table>
+<nav aria-label="Pagination" th:if="${totalPages > 0}">
+  <ul class="pagination justify-content-center">
+    <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+      <a th:replace="fragments/paging :: paging(1, '<<', 'First Page')"></a>
+    </li>
+    <li class="page-item font-weight-bold" th:classappend="${currentPage == 1} ? 'disabled'">
+      <a th:replace="fragments/paging :: paging(${currentPage - 1}, 'Prev', 'Previous Page')"></a>
+    </li>
+    <li class="page-item disabled" th:if="${currentPage - 2 > 1}">
+      <a class="page-link" href="#">...</a>
+    </li>
+    <li class="page-item" th:classappend="${page == currentPage} ? 'active'"
+        th:each="page : ${#numbers.sequence(currentPage > 2 ? currentPage - 2 : 1, currentPage + 2 < totalPages ? currentPage + 2 : totalPages)}">
+      <a th:replace="fragments/paging :: paging(${page}, ${page}, 'Page ' + ${page})"></a>
+    </li>
+    <li class="page-item disabled" th:if="${currentPage + 2 < totalPages}">
+      <a class="page-link" href="#">...</a>
+    </li>
+    <li class="page-item font-weight-bold" th:classappend="${currentPage == totalPages} ? 'disabled'">
+      <a th:replace="fragments/paging :: paging(${currentPage + 1},'Next', 'Next Page')"></a>
+    </li>
+    <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+      <a th:replace="fragments/paging :: paging(${totalPages}, '>>', 'Last Page')"></a>
+    </li>
+  </ul>
+</nav>
+</body>
+</html>

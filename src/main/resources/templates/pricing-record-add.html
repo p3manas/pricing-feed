@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Save Pricing Record</title>
+</head>
+<body>
+    <h1>Save Pricing Record</h1>
+    <form th:action="@{/pricing/save}" th:object="${pricingRecord}"  method="post">
+        <input type="hidden" th:field="*{id}"/>
+        <label for="name">Name:</label>
+        <input type="text" th:field="*{name}"/>
+        <label for="price">Price:</label>
+        <input type="number" step="0.01" th:field="*{price}"/>
+        <button type="submit">Save</button>
+    </form>
+
+</body>
+</html>
