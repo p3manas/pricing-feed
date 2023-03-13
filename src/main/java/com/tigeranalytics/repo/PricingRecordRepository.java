@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface PricingRecordRepository extends JpaRepository<PricingRecordBean, Long> {
 
-    @Query("SELECT p FROM PricingRecord p WHERE (:storeId IS NULL OR p.storeId = :storeId) "
+    @Query("SELECT p FROM com.tigeranalytics.bean.PricingRecordBean p WHERE (:storeId IS NULL OR p.storeId = :storeId) "
             + "AND (:sku IS NULL OR p.sku = :sku) "
             + "AND (:productName IS NULL OR p.productName = :productName) "
             + "AND (:date IS NULL OR p.date = :date)")

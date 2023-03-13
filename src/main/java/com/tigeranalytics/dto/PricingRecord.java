@@ -3,8 +3,6 @@ package com.tigeranalytics.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
@@ -14,12 +12,11 @@ import java.time.LocalDate;
 public class PricingRecord {
 
     private Long id;
-    @NotBlank
+    @NotNull
     private Integer storeId;
-    @NotBlank
+    @NotNull
     private String sku;
     private String productName;
-    @NotBlank
     private Float price;
     private LocalDate date;
 

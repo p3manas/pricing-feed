@@ -8,8 +8,12 @@
     <h1>Edit Pricing Record</h1>
     <form th:action="@{/pricing/save}" th:object="${pricingRecord}"  method="post">
         <input type="hidden" th:field="*{id}"/>
-        <label for="name">Name:</label>
-        <input type="text" th:field="*{name}"/>
+        <label for="name">SKU:</label>
+        <input type="text" th:field="*{sku}"/>
+        <label for="price">storeId:</label>
+        <input type="number" step="0.01" th:field="*{storeId}"/>
+        <label for="name">Product Name:</label>
+        <input type="text" th:field="*{productName}"/>
         <label for="price">Price:</label>
         <input type="number" step="0.01" th:field="*{price}"/>
         <button type="submit">Save</button>

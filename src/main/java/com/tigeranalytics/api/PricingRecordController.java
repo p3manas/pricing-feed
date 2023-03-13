@@ -62,11 +62,17 @@ public class PricingRecordController {
         return "pricing-record-add";
     }
 
+    @GetMapping("/fetchAll")
+    public String fetchAll(Model model) {
+        model.addAttribute("pricingRecord", new PricingRecord());
+        return "pricing-record-add";
+    }
+
 
     @PostMapping("/save")
     public String savePricingRecord(@ModelAttribute @Valid PricingRecord pricingRecord, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "create";
+            return "pricing-record-add";
         }
         try {
             pricingRecordService.savePricingRecord(pricingRecord);
@@ -74,6 +80,6 @@ public class PricingRecordController {
 
         }
 
-        return "create";
+        return "pricing-record-add";
     }
 }
